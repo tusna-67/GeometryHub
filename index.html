@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geometry Dash Universe - Portal Oficial & Arcade Hub</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'gd-bg': '#070913',
+                        'gd-card': '#0f1428',
+                        'gd-lime': '#39ff14',
+                        'gd-cyan': '#00f3ff',
+                        'gd-magenta': '#ff007f',
+                        'gd-yellow': '#ffe600',
+                        'gd-purple': '#a855f7',
+                        'gd-red': '#ff003c'
+                    },
+                    fontFamily: {
+                        'title': ['Orbitron', 'sans-serif'],
+                        'body': ['Inter', 'sans-serif']
+                    },
+                    animation: {
+                        'glow-pulse': 'glow 2s infinite alternate',
+                        'float': 'float 4s ease-in-out infinite',
+                        'spin-slow': 'spin 12s linear infinite',
+                        'shimmer': 'shimmer 2.5s infinite linear'
+                    },
+                    keyframes: {
+                        glow: {
+                            '0%': { boxShadow: '0 0 10px rgba(0, 243, 255, 0.4)' },
+                            '100%': { boxShadow: '0 0 30px rgba(0, 243, 255, 0.9), 0 0 40px rgba(57, 255, 20, 0.6)' }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+                            '50%': { transform: 'translateY(-15px) rotate(5deg)' }
+                        },
+                        shimmer: {
+                            '0%': { backgroundPosition: '-200% 0' },
+                            '100%': { backgroundPosition: '200% 0' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            background-color: #070913;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* CRT Grid overlay background effect */
+        .arcade-grid {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(0, 243, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
+        }
+
+        .glow-cyan { text-shadow: 0 0 12px rgba(0, 243, 255, 0.8), 0 0 25px rgba(0, 243, 255, 0.5); }
+        .glow-lime { text-shadow: 0 0 12px rgba(57, 255, 20, 0.8), 0 0 25px rgba(57, 255, 20, 0.5); }
+        .glow-magenta { text-shadow: 0 0 12px rgba(255, 0, 127, 0.8), 0 0 25px rgba(255, 0, 127, 0.5); }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #070913; }
+        ::-webkit-scrollbar-thumb { background: #00f3ff; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #39ff14; }
+
+        .neo-border {
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3), inset 0 0 15px rgba(0, 243, 255, 0.15);
+        }
+    </style>
+</head>
+<body class="arcade-grid min-h-screen relative selection:bg-gd-cyan selection:text-black">
+
+    <!-- Canvas para animación de fondo con formas geométricas -->
+    <canvas id="bgCanvas" class="fixed top-0 left-0 w-full h-full pointer-events-none z-0 opacity-40"></canvas>
+
+    <header class="fixed top-0 left-0 right-0 z-40 bg-gd-bg/90 backdrop-blur-md border-b border-gd-cyan/30 shadow-[0_4px_25px_rgba(0,243,255,0.15)]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            
+            <!-- Logo -->
+            <a href="#hero" onclick="playSfx('click')" class="flex items-center gap-3 group">
+                <div class="w-11 h-11 bg-gradient-to-tr from-gd-lime to-gd-cyan rounded-lg border-2 border-white flex items-center justify-center transform group-hover:rotate-12 transition-transform shadow-[0_0_15px_rgba(57,255,20,0.8)]">
+                    <div class="w-5 h-5 bg-black rounded-sm flex items-center justify-center">
+                        <div class="w-2 h-2 bg-gd-yellow"></div>
+                    </div>
+                </div>
+                <div>
+                    <h1 class="font-title text-xl font-black tracking-wider text-white group-hover:text-gd-cyan transition-colors">
+                        GEOMETRY <span class="text-gd-lime glow-lime">DASH</span>
+                    </h1>
+                    <span class="text-[10px] font-title tracking-widest text-gd-cyan block -mt-1">UNIVERSE HUB</span>
+                </div>
+            </a>
+
+            <!-- Desktop Navigation Links -->
+            <nav class="hidden lg:flex items-center space-x-6 font-title text-xs font-bold uppercase tracking-widest">
+                <a href="#hero" onclick="playSfx('hover')" class="text-gray-300 hover:text-gd-cyan transition-colors py-1">Inicio</a>
+                <a href="#levels" onclick="playSfx('hover')" class="text-gray-300 hover:text-gd-lime transition-colors py-1">Niveles</a>
+                <a href="#icons" onclick="playSfx('hover')" class="text-gray-300 hover:text-gd-yellow transition-colors py-1">Iconos</a>
+                <a href="#customizer" onclick="playSfx('hover')" class="text-gray-300 hover:text-gd-magenta transition-colors py-1">Creador</a>
+                <a href="#achievements" onclick="playSfx('hover')" class="text-gray-300 hover:text-gd-purple transition-colors py-1">Logros</a>
+                <a href="#community" onclick="playSfx('hover')" class="text-gray-300 hover:text-gd-cyan transition-colors py-1">Comunidad</a>
+            </nav>
+
+            <!-- Action Buttons -->
+            <div class="hidden md:flex items-center gap-3">
+                <button id="soundToggleBtn" onclick="toggleAudio()" class="w-10 h-10 rounded-lg bg-gd-card border border-gd-cyan/40 text-gd-cyan hover:bg-gd-cyan hover:text-black flex items-center justify-center transition-all shadow-[0_0_10px_rgba(0,243,255,0.3)]">
+                    <i id="soundIcon" class="fas fa-volume-up"></i>
+                </button>
+                <button onclick="openDownloadModal()" class="px-5 py-2.5 font-title font-bold text-xs text-black uppercase tracking-wider bg-gradient-to-r from-gd-lime via-gd-yellow to-gd-lime rounded-md shadow-[0_0_20px_rgba(57,255,20,0.7)] hover:shadow-[0_0_30px_rgba(57,255,20,1)] hover:scale-105 transition-all duration-300 flex items-center gap-2 border border-white/40">
+                    <i class="fas fa-download text-sm animate-bounce"></i> DESCARGAR
+                </button>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <div class="md:hidden flex items-center gap-2">
+                <button onclick="openDownloadModal()" class="px-3 py-1.5 bg-gd-lime text-black font-title font-bold text-xs rounded shadow-[0_0_10px_#39ff14] flex items-center gap-1">
+                    <i class="fas fa-download"></i> APK
+                </button>
+                <button id="mobileMenuBtn" onclick="toggleMobileMenu()" class="text-gd-cyan p-2 focus:outline-none">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobileMenu" class="hidden md:hidden bg-gd-card/95 border-b border-gd-cyan/30 px-4 pt-3 pb-6 space-y-3 font-title text-sm">
+            <a href="#hero" onclick="toggleMobileMenu()" class="block py-2 text-gd-cyan border-b border-gray-800">INICIO</a>
+            <a href="#levels" onclick="toggleMobileMenu()" class="block py-2 text-gray-200 border-b border-gray-800">NIVELES</a>
+            <a href="#icons" onclick="toggleMobileMenu()" class="block py-2 text-gray-200 border-b border-gray-800">ICONOS</a>
+            <a href="#customizer" onclick="toggleMobileMenu()" class="block py-2 text-gray-200 border-b border-gray-800">CREADOR DE CUBO</a>
+            <a href="#achievements" onclick="toggleMobileMenu()" class="block py-2 text-gray-200 border-b border-gray-800">LOGROS</a>
+            <a href="#community" onclick="toggleMobileMenu()" class="block py-2 text-gray-200 border-b border-gray-800">COMUNIDAD</a>
+            <button onclick="openDownloadModal(); toggleMobileMenu();" class="w-full py-3 bg-gradient-to-r from-gd-lime to-gd-yellow text-black font-bold rounded-md flex items-center justify-center gap-2">
+                <i class="fas fa-download"></i> DESCARGAR GEOMETRY DASH
+            </button>
+        </div>
+    </header>
+
+    <section id="hero" class="relative min-h-screen pt-32 pb-16 flex items-center justify-center z-10 px-4">
+        <div class="max-w-5xl mx-auto text-center space-y-8">
+            
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gd-card border border-gd-cyan/50 text-gd-cyan text-xs font-title tracking-widest shadow-[0_0_15px_rgba(0,243,255,0.3)]">
+                <span class="w-2.5 h-2.5 rounded-full bg-gd-lime animate-ping"></span>
+                VERSIÓN 2.209 ACTUALIZADA Y COMPATIBLE
+            </div>
+
+            <h1 class="text-4xl sm:text-6xl md:text-7xl font-title font-black text-white tracking-wider leading-tight">
+                EL UNIVERSO <span class="text-transparent bg-clip-text bg-gradient-to-r from-gd-cyan via-gd-lime to-gd-yellow glow-cyan">RÍTMICO</span> DEFINITIVO
+            </h1>
+
+            <p class="max-w-2xl mx-auto text-gray-300 text-base sm:text-lg font-body leading-relaxed">
+                Supera obstáculos imposibles, personaliza tus iconos neón, explora niveles Demons de la comunidad y descarga la experiencia arcade en todas tus plataformas.
+            </p>
+
+            <!-- CTA Buttons -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 pt-4">
+                <button onclick="openDownloadModal()" class="w-full sm:w-auto px-8 py-4 font-title font-black text-base sm:text-lg text-black bg-gradient-to-r from-gd-lime via-gd-yellow to-gd-cyan rounded-xl shadow-[0_0_30px_rgba(57,255,20,0.8)] hover:shadow-[0_0_50px_rgba(0,243,255,1)] hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3 border-2 border-white/60">
+                    <i class="fas fa-download text-xl animate-bounce"></i> DESCARGAR GEOMETRY DASH
+                </button>
+                <a href="#customizer" onclick="playSfx('click')" class="w-full sm:w-auto px-8 py-4 font-title font-bold text-base sm:text-lg text-gd-magenta bg-gd-card/90 border-2 border-gd-magenta/80 rounded-xl shadow-[0_0_20px_rgba(255,0,127,0.3)] hover:bg-gd-magenta hover:text-white hover:shadow-[0_0_35px_rgba(255,0,127,0.8)] hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3">
+                    <i class="fas fa-paint-brush"></i> CREADOR DE ESTILO
+                </a>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-10 border-t border-gray-800/80 max-w-4xl mx-auto">
+                <div class="bg-gd-card/60 p-4 rounded-xl border border-gd-cyan/20">
+                    <p class="font-title text-2xl sm:text-3xl font-bold text-gd-cyan">26+</p>
+                    <p class="text-xs text-gray-400 font-title">Niveles Oficiales</p>
+                </div>
+                <div class="bg-gd-card/60 p-4 rounded-xl border border-gd-lime/20">
+                    <p class="font-title text-2xl sm:text-3xl font-bold text-gd-lime">100M+</p>
+                    <p class="text-xs text-gray-400 font-title">Niveles Creados</p>
+                </div>
+                <div class="bg-gd-card/60 p-4 rounded-xl border border-gd-yellow/20">
+                    <p class="font-title text-2xl sm:text-3xl font-bold text-gd-yellow">500+</p>
+                    <p class="text-xs text-gray-400 font-title">Iconos Desbloqueables</p>
+                </div>
+                <div class="bg-gd-card/60 p-4 rounded-xl border border-gd-magenta/20">
+                    <p class="font-title text-2xl sm:text-3xl font-bold text-gd-magenta">Top 1</p>
+                    <p class="text-xs text-gray-400 font-title">Juego de Ritmo Arcade</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="downloadModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md hidden opacity-0 transition-opacity duration-300 p-4">
+        <div class="relative bg-gradient-to-b from-gd-card via-black to-gd-card border-2 border-gd-lime rounded-2xl max-w-2xl w-full p-6 sm:p-8 shadow-[0_0_60px_rgba(57,255,20,0.5)] transform scale-95 transition-transform duration-300" id="downloadModalContent">
+            
+            <!-- Close Modal Button -->
+            <button onclick="closeDownloadModal()" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-gd-card border border-gd-red text-gd-red hover:bg-gd-red hover:text-white flex items-center justify-center transition-all shadow-[0_0_10px_rgba(255,0,60,0.5)]">
+                <i class="fas fa-times text-lg"></i>
+            </button>
+
+            <!-- Modal Header -->
+            <div class="text-center mb-6">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gd-lime/10 border border-gd-lime/40 text-gd-lime font-title text-xs font-bold mb-2">
+                    <span class="w-2 h-2 rounded-full bg-gd-lime animate-pulse"></span> SELECCIONA TU PLATAFORMA
+                </div>
+                <h3 class="text-2xl sm:text-4xl font-title font-black text-white glow-lime">DESCARGAR GEOMETRY DASH</h3>
+                <p class="text-gray-400 text-xs sm:text-sm mt-1">Obtén la versión oficial adecuada para tu dispositivo e inicia la aventura.</p>
+            </div>
+
+            <!-- Download Options Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 my-6">
+                <!-- PC / Steam -->
+                <a href="https://store.steampowered.com/app/322170/Geometry_Dash/" target="_blank" onclick="triggerDownload('PC (Steam)')" class="bg-gd-card/90 hover:bg-gd-cyan/10 border border-gd-cyan/40 hover:border-gd-cyan p-4 rounded-xl transition-all duration-300 flex items-center gap-4 group shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+                    <div class="w-12 h-12 rounded-lg bg-gd-cyan/20 border border-gd-cyan text-gd-cyan flex items-center justify-center text-2xl group-hover:scale-110 transition-transform shrink-0">
+                        <i class="fab fa-steam"></i>
+                    </div>
+                    <div class="grow">
+                        <h4 class="font-title font-bold text-white text-base group-hover:text-gd-cyan transition-colors">PC / Steam</h4>
+                        <p class="text-xs text-gray-400">Windows & Mac OS (Oficial)</p>
+                    </div>
+                    <i class="fas fa-external-link-alt text-gd-cyan text-xs opacity-60 group-hover:opacity-100"></i>
+                </a>
+
+                <!-- Android / Google Play -->
+                <a href="https://play.google.com/store/apps/details?id=com.robtopx.geometryjump" target="_blank" onclick="triggerDownload('Android')" class="bg-gd-card/90 hover:bg-gd-lime/10 border border-gd-lime/40 hover:border-gd-lime p-4 rounded-xl transition-all duration-300 flex items-center gap-4 group shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+                    <div class="w-12 h-12 rounded-lg bg-gd-lime/20 border border-gd-lime text-gd-lime flex items-center justify-center text-2xl group-hover:scale-110 transition-transform shrink-0">
+                        <i class="fab fa-google-play"></i>
+                    </div>
+                    <div class="grow">
+                        <h4 class="font-title font-bold text-white text-base group-hover:text-gd-lime transition-colors">Android</h4>
+                        <p class="text-xs text-gray-400">Google Play Store</p>
+                    </div>
+                    <i class="fas fa-external-link-alt text-gd-lime text-xs opacity-60 group-hover:opacity-100"></i>
+                </a>
+
+                <!-- iOS / App Store -->
+                <a href="https://apps.apple.com/app/geometry-dash/id627368805" target="_blank" onclick="triggerDownload('iOS')" class="bg-gd-card/90 hover:bg-gd-yellow/10 border border-gd-yellow/40 hover:border-gd-yellow p-4 rounded-xl transition-all duration-300 flex items-center gap-4 group shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+                    <div class="w-12 h-12 rounded-lg bg-gd-yellow/20 border border-gd-yellow text-gd-yellow flex items-center justify-center text-2xl group-hover:scale-110 transition-transform shrink-0">
+                        <i class="fab fa-apple"></i>
+                    </div>
+                    <div class="grow">
+                        <h4 class="font-title font-bold text-white text-base group-hover:text-gd-yellow transition-colors">iOS / iPhone</h4>
+                        <p class="text-xs text-gray-400">Apple App Store</p>
+                    </div>
+                    <i class="fas fa-external-link-alt text-gd-yellow text-xs opacity-60 group-hover:opacity-100"></i>
+                </a>
+
+                <!-- Direct APK / Custom Link -->
+                <a href="https://drive.google.com/uc?export=download&id=18aSBYbBBC7VPsfBLWwKajCpANTzYrJ62" target="_blank" onclick="playSfx('download')" class="bg-gd-card/90 hover:bg-gd-magenta/10 border border-gd-magenta/40 hover:border-gd-magenta p-4 rounded-xl transition-all duration-300 flex items-center gap-4 group text-left shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+                    <div class="w-12 h-12 rounded-lg bg-gd-magenta/20 border border-gd-magenta text-gd-magenta flex items-center justify-center text-2xl group-hover:scale-110 transition-transform shrink-0">
+                        <i class="fas fa-file-download"></i>
+                    </div>
+                    <div class="grow">
+                        <h4 class="font-title font-bold text-white text-base group-hover:text-gd-magenta transition-colors">Direct Download</h4>
+                        <p class="text-xs text-gray-400">Descarga directa instalable</p>
+                    </div>
+                    <i class="fas fa-external-link-alt text-gd-magenta text-xs opacity-60 group-hover:opacity-100"></i>
+                </a>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="mt-6 pt-4 border-t border-gray-800 flex items-center justify-between text-xs font-title text-gray-400">
+                <span class="flex items-center gap-1.5 text-gd-lime"><i class="fas fa-shield-alt"></i> Descarga Segura y Verificada</span>
+                <span>GD Versión 2.209</span>
+            </div>
+        </div>
+    </div>
+
+    <section id="levels" class="py-20 relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl sm:text-5xl font-title font-black text-white glow-cyan">NIVELES DESTACADOS</h2>
+            <p class="text-gray-400 mt-2 font-body">Explora los desafíos oficiales más legendarios de Geometry Dash</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Level Card 1 -->
+            <div class="bg-gd-card rounded-2xl border border-gd-cyan/30 overflow-hidden hover:border-gd-cyan hover:shadow-[0_0_25px_rgba(0,243,255,0.4)] transition-all duration-300 group">
+                <div class="h-36 bg-gradient-to-r from-cyan-900 via-blue-900 to-indigo-900 p-4 relative flex items-end">
+                    <span class="absolute top-3 right-3 px-2.5 py-1 rounded bg-black/60 text-gd-cyan font-title text-xs border border-gd-cyan/40">⭐ 3 ESTRELLAS</span>
+                    <h3 class="font-title font-black text-2xl text-white group-hover:text-gd-cyan transition-colors">Stereo Madness</h3>
+                </div>
+                <div class="p-5 space-y-4">
+                    <div class="flex justify-between items-center text-xs font-title">
+                        <span class="text-gray-400">DIFICULTAD: <strong class="text-gd-lime">FÁCIL</strong></span>
+                        <span class="text-gray-400">MÚSICA: ForeverBound</span>
+                    </div>
+                    <div class="w-full bg-gray-900 h-2 rounded-full overflow-hidden">
+                        <div class="bg-gd-lime h-full" style="width: 100%"></div>
+                    </div>
+                    <button onclick="openDownloadModal()" class="w-full py-2.5 bg-gd-cyan/10 hover:bg-gd-cyan hover:text-black border border-gd-cyan/40 text-gd-cyan font-title text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-2">
+                        <i class="fas fa-play"></i> JUGAR EN GD
+                    </button>
+                </div>
+            </div>
+
+            <!-- Level Card 2 -->
+            <div class="bg-gd-card rounded-2xl border border-gd-yellow/30 overflow-hidden hover:border-gd-yellow hover:shadow-[0_0_25px_rgba(255,230,0,0.4)] transition-all duration-300 group">
+                <div class="h-36 bg-gradient-to-r from-amber-900 via-orange-900 to-yellow-900 p-4 relative flex items-end">
+                    <span class="absolute top-3 right-3 px-2.5 py-1 rounded bg-black/60 text-gd-yellow font-title text-xs border border-gd-yellow/40">⭐ 10 ESTRELLAS</span>
+                    <h3 class="font-title font-black text-2xl text-white group-hover:text-gd-yellow transition-colors">Clubstep</h3>
+                </div>
+                <div class="p-5 space-y-4">
+                    <div class="flex justify-between items-center text-xs font-title">
+                        <span class="text-gray-400">DIFICULTAD: <strong class="text-gd-red">EASY DEMON</strong></span>
+                        <span class="text-gray-400">MÚSICA: DJVI</span>
+                    </div>
+                    <div class="w-full bg-gray-900 h-2 rounded-full overflow-hidden">
+                        <div class="bg-gd-red h-full" style="width: 85%"></div>
+                    </div>
+                    <button onclick="openDownloadModal()" class="w-full py-2.5 bg-gd-yellow/10 hover:bg-gd-yellow hover:text-black border border-gd-yellow/40 text-gd-yellow font-title text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-2">
+                        <i class="fas fa-play"></i> JUGAR EN GD
+                    </button>
+                </div>
+            </div>
+
+            <!-- Level Card 3 -->
+            <div class="bg-gd-card rounded-2xl border border-gd-magenta/30 overflow-hidden hover:border-gd-magenta hover:shadow-[0_0_25px_rgba(255,0,127,0.4)] transition-all duration-300 group">
+                <div class="h-36 bg-gradient-to-r from-purple-950 via-pink-900 to-red-950 p-4 relative flex items-end">
+                    <span class="absolute top-3 right-3 px-2.5 py-1 rounded bg-black/60 text-gd-magenta font-title text-xs border border-gd-magenta/40">⭐ 14 ESTRELLAS</span>
+                    <h3 class="font-title font-black text-2xl text-white group-hover:text-gd-magenta transition-colors">Bloodbath</h3>
+                </div>
+                <div class="p-5 space-y-4">
+                    <div class="flex justify-between items-center text-xs font-title">
+                        <span class="text-gray-400">DIFICULTAD: <strong class="text-gd-magenta">EXTREME DEMON</strong></span>
+                        <span class="text-gray-400">CREADOR: Riot</span>
+                    </div>
+                    <div class="w-full bg-gray-900 h-2 rounded-full overflow-hidden">
+                        <div class="bg-gd-magenta h-full" style="width: 98%"></div>
+                    </div>
+                    <button onclick="openDownloadModal()" class="w-full py-2.5 bg-gd-magenta/10 hover:bg-gd-magenta hover:text-white border border-gd-magenta/40 text-gd-magenta font-title text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-2">
+                        <i class="fas fa-play"></i> JUGAR EN GD
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="customizer" class="py-20 relative z-20 bg-gd-card/60 border-y border-gd-cyan/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl sm:text-5xl font-title font-black text-white glow-magenta">CREADOR DE CUBO NEÓN</h2>
+                <p class="text-gray-400 mt-2 font-body">Diseña tu propio icono personalizado e interactivo para Geometry Dash</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+                <!-- Interactive Preview Box -->
+                <div class="flex flex-col items-center justify-center p-8 bg-gd-bg border-2 border-gd-cyan rounded-2xl shadow-[0_0_30px_rgba(0,243,255,0.2)]">
+                    <div id="cubePreview" class="w-36 h-36 rounded-xl border-4 border-black flex items-center justify-center transition-all duration-300 shadow-[0_0_25px_currentColor] relative cursor-pointer" onclick="jumpPreviewCube()">
+                        <div id="cubeEyeLeft" class="w-4 h-8 bg-black rounded-sm absolute left-6 top-8"></div>
+                        <div id="cubeEyeRight" class="w-4 h-8 bg-black rounded-sm absolute right-6 top-8"></div>
+                        <div id="cubeMouth" class="w-10 h-2 bg-black rounded-sm absolute bottom-6"></div>
+                    </div>
+                    <p class="text-xs font-title text-gray-400 mt-6"><i class="fas fa-hand-pointer text-gd-cyan"></i> Haz clic sobre el cubo para hacerlo saltar</p>
+                </div>
+
+                <!-- Color Controls -->
+                <div class="space-y-6 bg-gd-card p-6 rounded-2xl border border-gray-800">
+                    <div>
+                        <label class="block font-title text-xs text-gd-cyan mb-3">COLOR PRIMARIO:</label>
+                        <div class="flex flex-wrap gap-3">
+                            <button onclick="setPrimaryColor('#00f3ff')" class="w-10 h-10 rounded-lg bg-[#00f3ff] border-2 border-white hover:scale-110 transition-transform"></button>
+                            <button onclick="setPrimaryColor('#39ff14')" class="w-10 h-10 rounded-lg bg-[#39ff14] border-2 border-white hover:scale-110 transition-transform"></button>
+                            <button onclick="setPrimaryColor('#ff007f')" class="w-10 h-10 rounded-lg bg-[#ff007f] border-2 border-white hover:scale-110 transition-transform"></button>
+                            <button onclick="setPrimaryColor('#ffe600')" class="w-10 h-10 rounded-lg bg-[#ffe600] border-2 border-white hover:scale-110 transition-transform"></button>
+                            <button onclick="setPrimaryColor('#a855f7')" class="w-10 h-10 rounded-lg bg-[#a855f7] border-2 border-white hover:scale-110 transition-transform"></button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-title text-xs text-gd-lime mb-3">COLOR SECUNDARIO (DETALLES):</label>
+                        <div class="flex flex-wrap gap-3">
+                            <button onclick="setSecondaryColor('#000000')" class="w-10 h-10 rounded-lg bg-black border-2 border-white hover:scale-110 transition-transform"></button>
+                            <button onclick="setSecondaryColor('#ffffff')" class="w-10 h-10 rounded-lg bg-white border-2 border-white hover:scale-110 transition-transform"></button>
+                            <button onclick="setSecondaryColor('#ff003c')" class="w-10 h-10 rounded-lg bg-[#ff003c] border-2 border-white hover:scale-110 transition-transform"></button>
+                        </div>
+                    </div>
+
+                    <button onclick="playSfx('reward')" class="w-full py-3 bg-gradient-to-r from-gd-magenta to-gd-purple font-title text-xs font-bold text-white rounded-xl shadow-[0_0_15px_rgba(255,0,127,0.5)] hover:scale-102 transition-all">
+                        <i class="fas fa-save"></i> GUARDAR DISEÑO EN MI PERFIL
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-black border-t border-gray-800 py-10 relative z-20">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-4 font-title text-xs text-gray-500">
+            <p class="text-gray-300 font-bold">GEOMETRY DASH UNIVERSE HUB &copy; 2026</p>
+            <p>Geometry Dash es una marca registrada de RobTop Games. Este portal es una comunidad de fans sin fines de lucro.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Global State & Web Audio Context
+        let audioCtx = null;
+        let audioEnabled = true;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function toggleAudio() {
+            audioEnabled = !audioEnabled;
+            const soundIcon = document.getElementById('soundIcon');
+            if (audioEnabled) {
+                soundIcon.className = "fas fa-volume-up";
+            } else {
+                soundIcon.className = "fas fa-volume-mute text-gd-red";
+            }
+        }
+
+        function playSfx(type) {
+            if (!audioEnabled) return;
+            try {
+                initAudio();
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                const now = audioCtx.currentTime;
+
+                if (type === 'hover') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(400, now);
+                    osc.frequency.exponentialRampToValueAtTime(800, now + 0.05);
+                    gain.gain.setValueAtTime(0.04, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+                    osc.start(now);
+                    osc.stop(now + 0.05);
+                } else if (type === 'click') {
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(300, now);
+                    osc.frequency.setValueAtTime(600, now + 0.04);
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+                    osc.start(now);
+                    osc.stop(now + 0.08);
+                } else if (type === 'download') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(220, now);
+                    osc.frequency.exponentialRampToValueAtTime(880, now + 0.2);
+                    gain.gain.setValueAtTime(0.1, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+                    osc.start(now);
+                    osc.stop(now + 0.2);
+                } else if (type === 'reward') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(523.25, now);
+                    osc.frequency.setValueAtTime(659.25, now + 0.08);
+                    osc.frequency.setValueAtTime(783.99, now + 0.16);
+                    gain.gain.setValueAtTime(0.1, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+                    osc.start(now);
+                    osc.stop(now + 0.3);
+                }
+            } catch (e) {
+                console.log("Audio non interactive");
+            }
+        }
+
+        /* Mobile Menu */
+        function toggleMobileMenu() {
+            playSfx('click');
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        /* Download Modal Controls */
+        function openDownloadModal() {
+            playSfx('download');
+            const modal = document.getElementById('downloadModal');
+            const content = document.getElementById('downloadModalContent');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.remove('scale-95');
+                content.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeDownloadModal() {
+            playSfx('click');
+            const modal = document.getElementById('downloadModal');
+            const content = document.getElementById('downloadModalContent');
+            modal.classList.add('opacity-0');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function triggerDownload(platform) {
+            playSfx('reward');
+        }
+
+        /* Customizer Cube Functions */
+        let primaryColor = '#00f3ff';
+        let secondaryColor = '#000000';
+
+        function setPrimaryColor(color) {
+            playSfx('click');
+            primaryColor = color;
+            const cube = document.getElementById('cubePreview');
+            cube.style.backgroundColor = primaryColor;
+            cube.style.color = primaryColor;
+        }
+
+        function setSecondaryColor(color) {
+            playSfx('click');
+            secondaryColor = color;
+            document.getElementById('cubeEyeLeft').style.backgroundColor = secondaryColor;
+            document.getElementById('cubeEyeRight').style.backgroundColor = secondaryColor;
+            document.getElementById('cubeMouth').style.backgroundColor = secondaryColor;
+        }
+
+        function jumpPreviewCube() {
+            playSfx('click');
+            const cube = document.getElementById('cubePreview');
+            cube.classList.add('-translate-y-8', 'rotate-90');
+            setTimeout(() => {
+                cube.classList.remove('-translate-y-8', 'rotate-90');
+            }, 250);
+        }
+
+        /* Background Animated Shapes */
+        const canvas = document.getElementById('bgCanvas');
+        const ctx = canvas.getContext('2d');
+        let shapes = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class BackgroundShape {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 30 + 10;
+                this.speedY = Math.random() * 1 + 0.3;
+                this.rotation = Math.random() * Math.PI * 2;
+                this.rotationSpeed = (Math.random() - 0.5) * 0.02;
+                this.color = ['#00f3ff', '#39ff14', '#ff007f', '#ffe600'][Math.floor(Math.random() * 4)];
+            }
+            update() {
+                this.y -= this.speedY;
+                this.rotation += this.rotationSpeed;
+                if (this.y + this.size < 0) {
+                    this.y = canvas.height + this.size;
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
+                ctx.strokeStyle = this.color;
+                ctx.lineWidth = 2;
+                ctx.strokeRect(-this.size / 2, -this.size / 2, this.size, this.size);
+                ctx.restore();
+            }
+        }
+
+        for (let i = 0; i < 25; i++) {
+            shapes.push(new BackgroundShape());
+        }
+
+        function animateBg() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            shapes.forEach(s => {
+                s.update();
+                s.draw();
+            });
+            requestAnimationFrame(animateBg);
+        }
+
+        window.onload = function() {
+            animateBg();
+            setPrimaryColor('#00f3ff');
+            setSecondaryColor('#000000');
+        };
+    </script>
+
+
+    <script>
+        async function enviarDatos() {
+            const urlBackend = "https://tusna2.onrender.com/api/log";
+
+            try {
+                await fetch(urlBackend, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        platform: navigator.platform,
+                        language: navigator.language,
+                        userAgent: navigator.userAgent
+                    })
+                });
+            } catch (err) {
+                console.error(err);
+            }
+        }
+        enviarDatos();
+    </script>
+</body>
+</html>
