@@ -92,6 +92,437 @@
 </head>
 <body class="arcade-grid min-h-screen relative selection:bg-gd-cyan selection:text-black">
 
+    <!-- =========================================================
+     MODAL DE TÉRMINOS Y CONDICIONES
+========================================================= -->
+
+<div id="termsModal"
+     class="fixed inset-0 z-[9999] flex items-center justify-center
+            bg-black/90 backdrop-blur-md p-4">
+
+    <div class="relative w-full max-w-2xl max-h-[85vh]
+                bg-gradient-to-b from-gd-card via-black to-gd-card
+                border-2 border-gd-cyan rounded-2xl
+                shadow-[0_0_60px_rgba(0,243,255,0.35)]
+                overflow-hidden flex flex-col">
+
+        <!-- CABECERA -->
+        <div class="shrink-0 p-5 sm:p-6 border-b border-gray-800 text-center">
+
+            <div class="text-gd-cyan text-3xl mb-2">
+                <i class="fas fa-file-contract"></i>
+            </div>
+
+            <h2 class="text-xl sm:text-2xl font-bold text-white">
+                TÉRMINOS Y CONDICIONES
+            </h2>
+
+            <p class="text-xs text-gray-500 mt-2">
+                GEOMETRY DASH UNIVERSE HUB
+            </p>
+
+        </div>
+
+
+        <!-- CONTENIDO SCROLLABLE -->
+        <div id="termsContent"
+             class="overflow-y-auto px-5 sm:px-7 py-5 text-gray-300
+                    text-sm leading-relaxed">
+
+            <!-- ===============================
+                 VISTA INICIAL
+            ================================ -->
+
+            <div id="termsPreview">
+
+                <p class="text-gray-500 text-xs mb-4">
+                    Última actualización: 6 de octubre de 2026
+                </p>
+
+                <h3 class="text-gd-cyan font-bold text-lg mb-3">
+                    PREÁMBULO Y ACEPTACIÓN
+                </h3>
+
+                <p class="mb-4">
+                    Por favor, lea detenidamente los siguientes Términos y
+                    Condiciones antes de acceder, navegar, utilizar las
+                    herramientas interactivas del sitio web o proceder con
+                    la descarga del software recreativo
+                    "Geometry Dash".
+                </p>
+
+                <p class="mb-4">
+                    Este documento establece las condiciones generales de
+                    utilización de Geometry Dash Universe Hub, así como
+                    información relacionada con el tratamiento de datos
+                    técnicos y la utilización del servicio.
+                </p>
+
+                <div class="p-4 mt-5 rounded-lg
+                            border border-yellow-500/30
+                            bg-yellow-500/5">
+
+                    <div class="flex gap-3">
+
+                        <i class="fas fa-info-circle
+                                  text-yellow-400 mt-1"></i>
+
+                        <p class="text-xs text-yellow-200">
+                            Geometry Dash Universe Hub es un proyecto
+                            independiente de la comunidad y no mantiene
+                            afiliación oficial con RobTop Games.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ===============================
+                 DOCUMENTO COMPLETO
+            ================================ -->
+
+            <div id="fullTerms" class="hidden">
+
+                <!-- SECCIÓN 1 -->
+
+                <h3 class="text-gd-cyan font-bold text-lg mb-3">
+                    PREÁMBULO Y ACEPTACIÓN DE LOS TÉRMINOS
+                </h3>
+
+                <p class="mb-4">
+                    Por favor, lea detenidamente los siguientes Términos y
+                    Condiciones antes de acceder, navegar, utilizar las
+                    herramientas interactivas del sitio web o proceder con
+                    la descarga del software recreativo "Geometry Dash"
+                    (en adelante, el "Servicio").
+                </p>
+
+                <p class="mb-6">
+                    Al utilizar este sitio web, el Usuario reconoce que ha
+                    leído la información presentada en este documento.
+                    Si no está de acuerdo con alguna de las disposiciones
+                    aquí descritas, deberá abandonar el sitio web y cesar
+                    cualquier intento de uso o descarga.
+                </p>
+
+
+                <!-- SECCIÓN 1 -->
+
+                <h3 class="text-gd-cyan font-bold text-lg mb-3">
+                    SECCIÓN 1: NATURALEZA DEL SERVICIO Y ACCESO GRATUITO
+                </h3>
+
+                <p class="mb-4">
+                    El presente portal opera bajo un modelo de distribución
+                    libre y comunitaria, cuyo propósito principal es
+                    proporcionar a los entusiastas de los videojuegos de
+                    ritmo un acceso directo, rápido y centralizado a los
+                    archivos de instalación, parches de actualización,
+                    herramientas estéticas y recursos de la comunidad de
+                    Geometry Dash.
+                </p>
+
+                <p class="mb-4">
+                    <strong class="text-white">
+                        Gratuidad de la Prestación:
+                    </strong>
+                    Todo el contenido multimedia, enlaces externos
+                    oficiales, espejos de descarga y utilidades web
+                    provistas dentro de este dominio son enteramente
+                    gratuitos.
+                </p>
+
+                <p class="mb-6">
+                    <strong class="text-white">
+                        Ausencia de Garantías Comerciales:
+                    </strong>
+                    Dado que este portal funciona como un punto de encuentro
+                    y facilitador de descargas sin ánimo de lucro, el
+                    Servicio se ofrece "tal cual" y "según disponibilidad",
+                    sin garantías de ningún tipo sobre la compatibilidad
+                    absoluta con todos los sistemas operativos existentes
+                    o la disponibilidad ininterrumpida de los servidores
+                    de alojamiento.
+                </p>
+
+
+                <!-- SECCIÓN 2 -->
+
+                <h3 class="text-gd-cyan font-bold text-lg mb-3">
+                    SECCIÓN 2: RECOPILACIÓN, MONITOREO Y TRATAMIENTO
+                    DE LA DIRECCIÓN IP
+                </h3>
+
+                <p class="mb-4">
+                    En estricto cumplimiento de nuestras normativas
+                    internas de funcionamiento técnico, analítica de
+                    tráfico y seguridad del servidor, pueden procesarse
+                    automáticamente determinados datos técnicos en el
+                    momento en que el Usuario establece conexión con
+                    nuestra plataforma.
+                </p>
+
+                <p class="mb-3">
+                    La información técnica puede incluir:
+                </p>
+
+                <ul class="list-disc pl-6 mb-5 space-y-2">
+
+                    <li>
+                        La dirección IP pública desde la cual se conecta
+                        el dispositivo del Usuario.
+                    </li>
+
+                    <li>
+                        Las características del navegador web.
+                    </li>
+
+                    <li>
+                        El idioma predeterminado.
+                    </li>
+
+                    <li>
+                        El identificador User-Agent.
+                    </li>
+
+                    <li>
+                        Metadatos técnicos y marcas de tiempo de las
+                        solicitudes.
+                    </li>
+
+                </ul>
+
+                <p class="mb-6">
+                    <strong class="text-white">
+                        Finalidad del tratamiento:
+                    </strong>
+                    La información técnica puede utilizarse para
+                    funciones operativas y de seguridad, incluyendo
+                    balanceo de carga, protección de infraestructura,
+                    mitigación de tráfico malicioso y control técnico
+                    de las descargas.
+                </p>
+
+
+                <!-- SECCIÓN 3 -->
+
+                <h3 class="text-gd-cyan font-bold text-lg mb-3">
+                    SECCIÓN 3: PROPIEDAD INTELECTUAL Y DERECHOS DE AUTOR
+                </h3>
+
+                <p class="mb-4">
+                    <strong class="text-white">
+                        Derechos de la Franquicia Original:
+                    </strong>
+                    Geometry Dash, sus logotipos, nombres oficiales,
+                    bandas sonoras originales, mecánicas de juego y
+                    elementos visuales gráficos son marcas y elementos
+                    protegidos pertenecientes a sus respectivos titulares,
+                    incluyendo RobTop Games.
+                </p>
+
+                <p class="mb-4">
+                    Este sitio web no mantiene ninguna afiliación oficial,
+                    patrocinio ni vínculo corporativo directo con
+                    RobTop Games, operando estrictamente como un proyecto
+                    independiente mantenido por la comunidad.
+                </p>
+
+                <p class="mb-6">
+                    <strong class="text-white">
+                        Derechos sobre el Código del Sitio:
+                    </strong>
+                    El diseño de la interfaz gráfica, la disposición del
+                    código HTML/Tailwind, las animaciones en JavaScript y
+                    la estructura propia de este sitio web pertenecen a
+                    sus respectivos autores.
+                </p>
+
+
+                <!-- SECCIÓN 4 -->
+
+                <h3 class="text-gd-cyan font-bold text-lg mb-3">
+                    SECCIÓN 4: LIMITACIÓN DE RESPONSABILIDAD
+                </h3>
+
+                <p class="mb-6">
+                    Bajo ninguna circunstancia los administradores,
+                    desarrolladores, mantenedores o entidades
+                    colaboradoras de este sitio web serán responsables
+                    por daños directos, indirectos, incidentales,
+                    emergentes o punitivos, incluyendo, entre otros,
+                    pérdida de datos, interrupciones del sistema
+                    operativo, fallos de hardware o incompatibilidades
+                    de software derivadas del uso del sitio web o de
+                    archivos obtenidos mediante los enlaces proporcionados.
+                </p>
+
+
+                <!-- SECCIÓN 5 -->
+
+                <h3 class="text-gd-cyan font-bold text-lg mb-3">
+                    SECCIÓN 5: MODIFICACIONES Y ACTUALIZACIONES
+                    DE LOS TÉRMINOS
+                </h3>
+
+                <p class="mb-6">
+                    Nos reservamos el derecho de modificar, enmendar,
+                    actualizar o reemplazar las disposiciones de los
+                    presentes Términos y Condiciones cuando resulte
+                    necesario. Las modificaciones serán publicadas en
+                    esta misma sección del sitio web.
+                </p>
+
+
+                <!-- INFORMACIÓN FINAL -->
+
+                <div class="mt-6 p-4 rounded-lg
+                            border border-gd-purple/40
+                            bg-gd-purple/5">
+
+                    <p class="text-xs text-gray-400">
+                        <strong class="text-white">
+                            Versión del documento:
+                        </strong>
+                        4.2.0-Legal
+                    </p>
+
+                    <p class="text-xs text-gray-400 mt-1">
+                        Última actualización:
+                        6 de octubre de 2026
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ===============================
+             BOTONES
+        ================================ -->
+
+        <div class="shrink-0 p-4 sm:p-5 border-t border-gray-800
+                    bg-black/50">
+
+            <div class="flex flex-col sm:flex-row gap-3">
+
+                <!-- LEER MÁS -->
+
+                <button id="readMoreBtn"
+                        type="button"
+                        onclick="toggleTerms()"
+                        class="flex-1 px-5 py-3 rounded-lg
+                               border border-gd-cyan
+                               text-gd-cyan font-bold
+                               hover:bg-gd-cyan hover:text-black
+                               transition-all">
+
+                    <i class="fas fa-book-open mr-2"></i>
+                    LEER MÁS
+
+                </button>
+
+
+                <!-- ENTENDIDO -->
+
+                <button type="button"
+                        onclick="closeTerms()"
+                        class="flex-1 px-5 py-3 rounded-lg
+                               bg-gd-purple text-white font-bold
+                               hover:opacity-80
+                               transition-all">
+
+                    <i class="fas fa-check mr-2"></i>
+                    ENTENDIDO
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     JAVASCRIPT DEL MODAL
+========================================================= -->
+
+<script>
+
+function toggleTerms() {
+
+    const fullTerms = document.getElementById("fullTerms");
+    const button = document.getElementById("readMoreBtn");
+    const content = document.getElementById("termsContent");
+
+    if (!fullTerms || !button) {
+        console.error("Error: no se encontró el contenido de términos.");
+        return;
+    }
+
+    const isHidden = fullTerms.classList.contains("hidden");
+
+    if (isHidden) {
+
+        // Mostrar documento completo
+        fullTerms.classList.remove("hidden");
+
+        button.innerHTML =
+            '<i class="fas fa-chevron-up mr-2"></i> OCULTAR';
+
+        // Llevar el scroll hasta el documento
+        setTimeout(function() {
+
+            fullTerms.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+        }, 100);
+
+    } else {
+
+        // Ocultar documento completo
+        fullTerms.classList.add("hidden");
+
+        button.innerHTML =
+            '<i class="fas fa-book-open mr-2"></i> LEER MÁS';
+
+        // Volver arriba
+        content.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    }
+}
+
+
+function closeTerms() {
+
+    const modal = document.getElementById("termsModal");
+
+    if (!modal) return;
+
+    modal.style.transition = "opacity 0.3s ease";
+    modal.style.opacity = "0";
+
+    setTimeout(function() {
+
+        modal.remove();
+
+    }, 300);
+}
+
+</script>
+
     <!-- Canvas para animación de fondo con formas geométricas -->
     <canvas id="bgCanvas" class="fixed top-0 left-0 w-full h-full pointer-events-none z-0 opacity-40"></canvas>
 
